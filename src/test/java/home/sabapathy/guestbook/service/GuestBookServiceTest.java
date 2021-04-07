@@ -1,6 +1,5 @@
 package home.sabapathy.guestbook.service;
 
-import home.sabapathy.guestbook.controller.dto.CommentDto;
 import home.sabapathy.guestbook.entity.Comment;
 import home.sabapathy.guestbook.repository.CommentRepository;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
