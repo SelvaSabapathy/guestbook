@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import home.sabapathy.guestbook.controller.dto.CommentDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -17,12 +19,15 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
 @Transactional
 public class GuestBookIT {
 
@@ -38,6 +43,7 @@ public class GuestBookIT {
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
+                .andDo(document("Comments"))
                 .andReturn();
         String commentDtoString = mvcResult.getResponse().getContentAsString();
         assertThat(commentDtoString, is("[]"));
@@ -49,11 +55,18 @@ public class GuestBookIT {
         mockMvc.perform(post("/guestbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(commentDto))
-        ).andExpect(status().isCreated());
+        )
+                .andDo(document("AddComment", PayloadDocumentation.responseFields(
+                        fieldWithPath("name").description("Name"),
+                        fieldWithPath("comment").description("Comment"))))
+                .andExpect(status().isCreated());
 
         MvcResult mvcResult = mockMvc.perform(get("/guestbook")
                 .contentType(MediaType.APPLICATION_JSON)
         )
+                .andDo(document("Comments", PayloadDocumentation.responseFields(
+                        fieldWithPath("[0].name").description("Name"),
+                        fieldWithPath("[0].comment").description("Comment"))))
                 .andExpect(status().isOk())
                 .andReturn();
         String commentDtoString = mvcResult.getResponse().getContentAsString();
