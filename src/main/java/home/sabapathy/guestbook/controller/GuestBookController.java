@@ -2,7 +2,7 @@ package home.sabapathy.guestbook.controller;
 
 import home.sabapathy.guestbook.controller.dto.CommentDto;
 import home.sabapathy.guestbook.entity.Comment;
-import home.sabapathy.guestbook.service.GuestbookService;
+import home.sabapathy.guestbook.service.GuestBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +14,18 @@ import java.util.stream.Collectors;
 @RequestMapping("/guestbook")
 public class GuestBookController {
     @Autowired
-    private GuestbookService guestbookService;
+    private GuestBookService guestbookService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentDto> getEntries() {
+    public List<CommentDto> getComments() {
         List<Comment> comments = guestbookService.getComments();
         return comments.stream().map(c -> new CommentDto(c.getName(), c.getComment())).collect(Collectors.toList());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto addEntry(@RequestBody CommentDto commentDto) {
+    public CommentDto addComment(@RequestBody CommentDto commentDto) {
         Comment comment = new Comment();
         comment.setName(commentDto.getName());
         comment.setComment(commentDto.getComment());

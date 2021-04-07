@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class GuestbookService {
+public class GuestBookService {
 
     @Autowired
     private CommentRepository commentRepository;
