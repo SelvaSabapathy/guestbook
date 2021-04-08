@@ -27,3 +27,21 @@ Build Docker Image
 Run application in Docker container
 
     docker run --name guestbook --network guestbook-net -e PORT=8080 -e SPRING_PROFILES_ACTIVE=docker -p 9000:8080 -d guestbook:dev
+
+## Instructions to run in Heroku
+* On Heroku
+    * Create a new app in Heroku
+    * Add Postgres DB resource for that app
+    * Add environment variable `SPRING_PROFILES_ACTIVE = heroku`
+* In local terminal/shell
+    * Set remote repo for the app `heroku git:remote -a [appname]`
+* On Heroku
+    * Choose Container Registry deployment option
+* In local terminal/shell
+    * Login to Heroku `heroku login`
+    * Login to Heroku container registry `heroku container:login`
+    * Push the app to Heroku `heroku container:push web`
+    * Deploy the app in Heroku `heroku container:release web`
+
+## URL to reach the app
+`https://[appname].herokuapp.com/guestbook`
